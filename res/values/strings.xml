@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GPS02</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="GPSButton">GPSButton</string>
+    <string name="Info">Um die GPS-Position zu ermitteln drücken Sie den GPS-Button</string>
+    <string name="Stopuhr">0 : 0 : 0</string>
+    <string name="item1">Beenden</string>
+    <string name="item2">item2</string>
+    <string name="Test">Zeiten</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="title_section1">manuelle Stopuhr</string>
+    <string name="title_section2">GPS-basierte Stopuhr</string>
+    <string name="title_section3">Section 3</string>
+
+</resources>

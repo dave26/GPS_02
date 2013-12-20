@@ -1,8 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+ <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/Info" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/AnzeigeStopuhr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_Standort"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:text="@string/Stopuhr"
+        android:textSize="@android:dimen/app_icon_size" />
+
+    <Button
+        android:id="@+id/Button_Stopuhr_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="39dp"
+        android:layout_marginLeft="48dp"
+        android:text="Start" />
+
+    <TextView
+        android:id="@+id/Stopuhrstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_Stopuhr_start"
+        android:layout_centerHorizontal="true"
+        android:text="Stopuhr inaktiv" />
+
+    <Button
+        android:id="@+id/Button_Stopuhr_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Stopuhrstatus"
+        android:layout_toRightOf="@+id/Stopuhrstatus"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/Button_Standort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview"
+        android:layout_marginTop="43dp"
+        android:layout_toRightOf="@+id/Stopuhrstatus"
+        android:text="@string/GPSButton" />
+
+    <Button
+        android:id="@+id/Button_Standort_suchen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/AnzeigeStopuhr"
+        android:layout_alignRight="@+id/Stopuhrstatus"
+        android:layout_marginRight="17dp"
+        android:text="Standort festlegen" />
+
+    <Button
+        android:id="@+id/Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Stopuhrstatus"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/AnzeigeStopuhr"
+        android:text="@string/Test"
+        android:onClick="sendMessage" />
+    
+</RelativeLayout>

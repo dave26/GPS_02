@@ -34,7 +34,6 @@ public final class R {
         public static final int action_settings=0x7f080009;
         public static final int container=0x7f080000;
         public static final int item1=0x7f08000a;
-        public static final int item2=0x7f08000b;
         public static final int textview=0x7f080001;
     }
     public static final class layout {

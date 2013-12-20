@@ -11,9 +11,12 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +26,10 @@ import android.widget.Toast;
  * @author Dave
  *
  */
-public class Startpunkt extends Activity{
+public class Startpunkt /*extends Activity*/{
 	
 	private Activity Activity;
+	private DialogFragment fragment;
 	public boolean IsRunning;
 	private long startTime;   
     public boolean zwanzigsec;
@@ -40,6 +44,7 @@ public class Startpunkt extends Activity{
         clockTimer.schedule(new Task(), 0, 100);
         IsRunning=false;
         this.Activity=a;
+        //fragment=a;
 	}
 	
 	public void Set_punkt(double Latitude, double Longitude)
@@ -81,6 +86,7 @@ public class Startpunkt extends Activity{
 	        if(ms>=20)
 	        {
 	        	zwanzigsec=true;  
+	        	GPS_basierte_Stopuhr.Standort_jetzt_festlegen=false;
 	        	Latitude=Latitude_temp;
 	        	Longitude=Longitude_temp;
 	        	clockTimer.cancel();

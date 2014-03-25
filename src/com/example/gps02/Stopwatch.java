@@ -2,16 +2,17 @@ package com.example.gps02;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Stopwatch  implements Runnable
 {
     private long startTime;
     private boolean started;
-    private TextView AnzeigeStopuhr;
+    private ImageView Anzeige;
 
-    public Stopwatch(TextView Anzeige){
-    	AnzeigeStopuhr=Anzeige;
+    public Stopwatch(ImageView Anzeige){
+    	this.Anzeige=Anzeige;
     }
     
     
@@ -19,7 +20,8 @@ public class Stopwatch  implements Runnable
     public void startThread()
     {
         this.startTime = System.nanoTime();
-        this.started = true;        
+        this.started = true; 
+        Anzeige.setVisibility(0);
     }
 
     public void run()
@@ -34,13 +36,11 @@ public class Stopwatch  implements Runnable
              out[1] = (int)(milliTime/1000000000)%60;		//sec
              out[2] = (int)((milliTime/1000000)%1000);		//ms
              String Time= out[0] + " : " + out[1] + " : " + out[2];
-             AnzeigeStopuhr.setText(Time);
-             try {
-				Thread.currentThread().sleep(900);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+             if(out[1]>2)
+             {
+             Anzeige.setVisibility(4); 
+             this.stopThread();
+             }           
         }
     }
 

@@ -24,34 +24,44 @@ public class SystemTimerAndroid {
 	
 	private boolean Darstellung;
 	private long startTime;
+	private long stopTime;
+	private long waitingTime=0;
     private boolean started;
     private TextView AnzeigeStopuhr;
-    public boolean zwanzigsec;
-	
-	
-	
+    //public boolean zwanzigsec;	
     private final Timer clockTimer;
+    private boolean wait;
+    
     
     public SystemTimerAndroid(TextView Anzeige){
     	Darstellung=true;
     	AnzeigeStopuhr=Anzeige;
     	clockTimer = new Timer();
         clockTimer.schedule(new Task(), 0, 100);
-       
+        wait=false;
     }
     public SystemTimerAndroid(){
     	
     	Darstellung=false;
     	clockTimer = new Timer();
         clockTimer.schedule(new Task(), 0, 100);
-      
+        wait=false;
     }
     
     public void startThread()
     {
-        this.startTime = System.nanoTime();
-        this.started = true; 
-        zwanzigsec=false;
+    	if(wait)
+    	{         
+        //zwanzigsec=false;        
+        	wait=false;
+        	waitingTime=waitingTime+(System.nanoTime()-stopTime);
+        }
+    	else
+    	{
+    		this.startTime = System.nanoTime();
+    		this.started = true;
+    		waitingTime=0;
+    	}
         
     }
 
@@ -65,24 +75,21 @@ public class SystemTimerAndroid {
     private final Handler timerHandler = new Handler() {
         public void handleMessage (Message  msg) {
             // runs in context of the main thread
-            timerSignal();
+        	if(wait==false)
+        		timerSignal();
         }
     };
 
     private List<String> clockListener = new ArrayList<String>();
 
-    //public SystemTimerAndroid() {
-    //    clockTimer = new Timer();
-    //    clockTimer.schedule(new Task(), 1000, 1000);
-    //}
-
     private void timerSignal() {
-        //for(SystemTimerListener listener : clockListener)
-          //  listener.onSystemTimeSignal(); 
+         
         DecimalFormat df = new DecimalFormat("00");
         
-    	long milliTime = System.nanoTime() - this.startTime;
-    	
+      
+        long milliTime = System.nanoTime() - this.startTime-waitingTime;
+       
+        
     	if(Darstellung)
     	{
 	        int[] out = new int[]{00, 00, 00};
@@ -94,27 +101,19 @@ public class SystemTimerAndroid {
 	        out[2] = (int)((milliTime/10000000)%100);		//ms
 	        String Time= df.format(out[0]) + " : " + df.format(out[1]) + " : " + df.format(out[2]);
 	        AnzeigeStopuhr.setText(Time);
-	        if(out[1]<=20)
-	        	zwanzigsec=true;
+//	        if(out[1]<=20)
+//	        	zwanzigsec=true;
     	}
-//        try {
-//			Thread.currentThread().sleep(900);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
     }
 
     public void killTimer() {
         clockTimer.cancel();
     }
-    public void StopTimer(){
-    	try {
-			clockTimer.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public void WaitTimer(){
+    	if(wait==false){
+    	wait=true;
+    	stopTime=System.nanoTime();
+    	}
     }
 
     public void addListener(String listener) {
@@ -124,7 +123,7 @@ public class SystemTimerAndroid {
     {
     	DecimalFormat df = new DecimalFormat("00");
         
-    	long milliTime = System.nanoTime() - this.startTime;
+    	long milliTime = System.nanoTime() - this.startTime-waitingTime;
         int[] out = new int[]{00, 00, 00};
        
         out[0]=(int)(milliTime/(1000000000))/60;		//min
@@ -139,7 +138,7 @@ public class SystemTimerAndroid {
     {
     	DecimalFormat df = new DecimalFormat("00");
         
-    	long milliTime = System.nanoTime() - this.startTime;
+    	long milliTime = System.nanoTime() - this.startTime-waitingTime;
         int[] out = new int[]{00, 00, 00};
        
         out[0]=(int)(milliTime/(1000000000))/60;		//min
@@ -156,61 +155,3 @@ public class SystemTimerAndroid {
   
     }
 }
-
-//public class Stopwatch  implements Runnable
-//{
-//    private long startTime;
-//    private boolean started;
-//    private TextView AnzeigeStopuhr;
-//
-//    public Stopwatch(TextView Anzeige){
-//    	AnzeigeStopuhr=Anzeige;
-//    }
-//    
-//    
-//    
-//    public void startThread()
-//    {
-//        this.startTime = System.nanoTime();
-//        this.started = true;        
-//    }
-//
-//    public void run()
-//    {
-//        while (started)
-//        {
-//            // empty code since currentTimeMillis increases by itself
-//        	 long milliTime = System.nanoTime() - this.startTime;
-//             int[] out = new int[]{0, 0, 0};
-//            
-//             out[0]=(int)(milliTime/(1000000000))/60;		//min
-//             out[1] = (int)(milliTime/1000000000)%60;		//sec
-//             out[2] = (int)((milliTime/1000000)%1000);		//ms
-//             String Time= out[0] + " : " + out[1] + " : " + out[2];
-//             AnzeigeStopuhr.setText(Time);
-//             try {
-//				Thread.currentThread().sleep(900);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//        }
-//    }
-//
-//
-//    public int[] getTime()
-//    {
-//        long milliTime = System.nanoTime() - this.startTime;
-//        int[] out = new int[]{0, 0, 0};
-//       
-//        out[0]=(int)(milliTime/(1000000000))/60;		//min
-//        out[1] = (int)(milliTime/1000000000)%60;		//sec
-//        out[2] = (int)((milliTime/1000000)%1000);		//ms
-//        return out;
-//    }
-//    public void stopThread()
-//    {
-//        this.started = false;
-//    }
-//}
-//

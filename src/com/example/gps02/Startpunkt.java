@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.example.gps02;
 
 import java.text.DecimalFormat;

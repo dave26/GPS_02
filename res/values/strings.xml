@@ -7,12 +7,13 @@
     <string name="GPSButton">GPSButton</string>
     <string name="Info">Um die GPS-Position zu ermitteln drücken Sie den GPS-Button</string>
     <string name="Stopuhr">0 : 0 : 0</string>
-    <string name="item1">Beenden</string>
-    <string name="item2">item2</string>
+    <string name="menue_beenden">Beenden</string>
     <string name="Test">Zeiten</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="title_section1">manuelle Stopuhr</string>
     <string name="title_section2">GPS-basierte Stopuhr</string>
-    <string name="title_section3">Section 3</string>
+    <string name="menue_landscape">Ansicht Landscape</string>
+    <string name="menue_portrait">Ansicht Portrait</string>
+    <string name="button_back">Back</string>
 
 </resources>

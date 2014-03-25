@@ -25,30 +25,15 @@ public class manuelle_Stopuhr extends Fragment {
 		Main_Activity=a;
 	}
 	
-	private static final String TAG = MainActivity.class.getSimpleName();	
-	
-	
 	private TextView AnzeigeStopuhr;
-	private Button GPSButton;
 	private Button Button_Stopuhr_start;
 	private Button Button_Stopuhr_stop;	
 	private TextView Stopuhrstatus;
-	private Button alte_Zeiten;
-	
-	
-	
-	
-	String Time;
-	int[] curTime;
-	boolean Klick=false;
-	
-	
-	
-	
-	
-	SystemTimerAndroid Sy;	
-	Zeitenverwaltung Z;
-	
+	private Button alte_Zeiten;	
+	private SystemTimerAndroid Sy;	
+	private Zeitenverwaltung Z;
+	private boolean Klick=false;
+	private boolean button_stop_geklickt=false;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,15 +59,20 @@ public class manuelle_Stopuhr extends Fragment {
 					Sy= new SystemTimerAndroid(AnzeigeStopuhr);
 					Sy.startThread();					
 					Klick=true;					
-					Stopuhrstatus.setText("Stopuhr aktiv");
-					
-						
+					Stopuhrstatus.setText("Stopuhr aktiv");						
 				}
 				else
 				{	
-					//alte_Zeiten.setText(Sy.GetTime());
-					Z.Add_Zeit(Sy.GetTime());
-					Sy.startThread();
+					if(button_stop_geklickt)
+					{						
+						Sy.startThread();
+						button_stop_geklickt=false;
+					}
+					else
+					{
+						Z.Add_Zeit(Sy.GetTime());
+						Sy.startThread();						
+					}
 				}
 				
 			}
@@ -91,7 +81,9 @@ public class manuelle_Stopuhr extends Fragment {
 		Button_Stopuhr_stop.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				Sy.killTimer();
+				//Sy.killTimer();
+				Sy.WaitTimer();
+				button_stop_geklickt=true;
 			}
 		});
 						

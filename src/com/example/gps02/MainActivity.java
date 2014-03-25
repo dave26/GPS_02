@@ -10,6 +10,8 @@ import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,7 +47,7 @@ ActionBar.OnNavigationListener {
 private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 public final static String EXTRA_MESSAGE ="com.example.gps02.Verknüpfung"; //Verknüpfung der Activitys
 //public class MainActivity extends Activity {
-private LocationManager manager;
+//private LocationManager manager;
 
 	
 
@@ -65,8 +68,8 @@ private LocationManager manager;
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
-		case R.id.item1:
-			//textview.setText(item.getTitle());
+		case R.id.menue_beenden:
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			 
 			builder.setTitle("Beenden");
@@ -103,6 +106,14 @@ private LocationManager manager;
 			AlertDialog alert = builder.create();
 			alert.show();
 			return true;
+			
+		case R.id.menue_portrait:
+			setOrientation_portrait();
+			return true;
+			
+		case R.id.menue_landscape:
+			setOrientation_landscape();
+			return true;
 		
 			default:
 				return super.onOptionsItemSelected(item);
@@ -121,6 +132,8 @@ private LocationManager manager;
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 		
 		// Set up the action bar to show a dropdown list.
 				final ActionBar actionBar = getActionBar();
@@ -187,21 +200,39 @@ private LocationManager manager;
 		return true;
 	}
 
+	
 
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
-//		Log.d(TAG, "onStart()");
-//		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0,
-//				GPS_basierte_Stopuhr.listener);
 	}
 	
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-//		Log.d(TAG, "onPause()");
-//		manager.removeUpdates(listener);
+	}
+	
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	   
+	}
+	
+	protected void setOrientation_portrait() {
+	    int current = getRequestedOrientation();
+	    // only switch the orientation if not in portrait
+	    if ( current != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT ) {
+	        setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
+	    }
+	}
+	protected void setOrientation_landscape() {
+	    int current = getRequestedOrientation();
+	    // only switch the orientation if not in portrait
+	    if ( current != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE ) {
+	        setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+	    }
 	}
 }
 

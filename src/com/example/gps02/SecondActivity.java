@@ -5,25 +5,39 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class SecondActivity extends Activity {
 
+	Activity activity=this;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-
+	    setContentView(R.layout.activity_second);
+	    //back=(Button)findViewById(R.id.button_back);
 	    // Get the message from the intent
 	    Intent intent = getIntent();
 	    String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
 	    // Create the text view
-	    TextView textView = new TextView(this);
-	    //textView.setTextSize(40);
+	    TextView textView = (TextView)findViewById(R.id.textview_secondactivity);
+	  
 	    textView.setText(message);
 
-	    // Set the text view as the activity layout
-	    setContentView(textView);
+	    Button back = (Button)findViewById(R.id.button_back);
+
+	    back.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				finish();
+			}
+		});
+	    
 	}
 	
 

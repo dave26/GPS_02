@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
-    <item android:id="@+id/item1"
-        android:title = "@string/item1"
+    <item android:id="@+id/menue_beenden"
+        android:title = "@string/menue_beenden"
+        />
+    <item android:id="@+id/menue_portrait"
+        android:title = "@string/menue_portrait"
+        />
+    <item android:id="@+id/menue_landscape"
+        android:title = "@string/menue_landscape"
         />
     
-    
-
 </menu>

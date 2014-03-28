@@ -1,9 +1,6 @@
 package com.example.gps02;
 
-import android.app.Activity;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class Stopwatch  implements Runnable
 {
@@ -35,7 +32,6 @@ public class Stopwatch  implements Runnable
              out[0]=(int)(milliTime/(1000000000))/60;		//min
              out[1] = (int)(milliTime/1000000000)%60;		//sec
              out[2] = (int)((milliTime/1000000)%1000);		//ms
-             String Time= out[0] + " : " + out[1] + " : " + out[2];
              if(out[1]>2)
              {
              Anzeige.setVisibility(4); 

@@ -4,7 +4,6 @@
 package com.example.gps02;
 
 import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * @author Dave

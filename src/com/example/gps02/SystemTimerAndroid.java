@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.gps02.R.string;
-
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
@@ -121,8 +119,6 @@ public class SystemTimerAndroid {
     }
     public long GetTime_sec()
     {
-    	DecimalFormat df = new DecimalFormat("00");
-        
     	long milliTime = System.nanoTime() - this.startTime-waitingTime;
         int[] out = new int[]{00, 00, 00};
        

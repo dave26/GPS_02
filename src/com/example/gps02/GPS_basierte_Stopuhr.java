@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 public class GPS_basierte_Stopuhr extends DialogFragment {
 
@@ -55,9 +58,8 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 	int[] curTime;
 	boolean b_Button_Start=false;
 	boolean GPS_Punkt=false;
-	boolean hilfs_GPS=false;
 	boolean Fahrzeug_am_StartPunkt=true;
-	boolean StandortButton_AnzeigeUmschalt=false;
+	boolean StandortButton_Anzeige_Zielerreicht=false;
 	
 	public static boolean Standort_jetzt_festlegen=false;
 	
@@ -114,14 +116,16 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 		// Namen ausgeben
 		String name = fragment_manager.getBestProvider(criteria, true);
 		Log.d(TAG, name);
-		
+
 		// LocationListener-Objekt erzeugen
-		
+
+
 		this.listener = new LocationListener() {
 			@Override
 			public void onStatusChanged(String provider, int status,
 					Bundle extras) {
 				Log.d(TAG, "onStatusChanged()");
+				Toast.makeText(Main_Activity, "onStatusChanged", Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
@@ -146,7 +150,7 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 				
 				//Log.d(TAG, "onLocationChanged()");
 				letztePosition="Breite: "+Lat+"Länge: "+Long;
-				
+				textview.setText(letztePosition);
 				if (location != null) //Location nicht null und Button Standort_suchen gedrückt
 				{	
 					
@@ -158,11 +162,9 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 					
 					if(GPS_Startpunkt.zwanzigsec==false&&Standort_jetzt_festlegen&&Koordinaten_Differenz_größer2m(Breite_temp, Lat, Länge_temp, Long))
 					{
-						GPS_Startpunkt.Set_punkt(Lat, Long);
-						hilfs_GPS=true;
-						
+						GPS_Startpunkt.Set_punkt(Lat, Long);	
 					}
-					else if(GPS_Punkt==false && hilfs_GPS)	//20s kein Standortwechsel und noch kein Punkt vorher aufgenommen
+					else if(GPS_Startpunkt.zwanzigsec&&GPS_Punkt==false)	//20s kein Standortwechsel und noch kein Punkt vorher aufgenommen
 					{										
 						set_Startpunkt_in_database(GPS_Startpunkt.Latitude,GPS_Startpunkt.Longitude);//Koordinaten vom vorherigen Aufruf
 						safe_data=true;
@@ -170,7 +172,7 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 						Standort_jetzt_festlegen=false;
 						
 					}
-					else if(GPS_Punkt && hilfs_GPS)	//GPS-StartPunkt aufgenommen
+					else if(GPS_Punkt)	//GPS-StartPunkt aufgenommen
 					{
 						//GPS Daten sind gefunden
 						if(safe_data)//für nur eine Runde speichern
@@ -181,10 +183,10 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 						{
 							Timemanagement(Lat,Long);		//Stoppen funktioniert noch nicht->debuggen							
 						}	
-						if(StandortButton_AnzeigeUmschalt==true)
+						if(StandortButton_Anzeige_Zielerreicht==false)
 						{
 							Button_Standort_festlegen.setText("Ziel erreicht");
-							StandortButton_AnzeigeUmschalt=false;						
+							StandortButton_Anzeige_Zielerreicht=true;						
 						}					
 										
 						
@@ -213,18 +215,24 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 				
 		Button_Stopuhr_start.setOnClickListener(new OnClickListener(){
 			@Override
-			public void onClick(View v){			
-				if(b_Button_Start==false){
-					Sy= new SystemTimerAndroid(AnzeigeStopuhr);
-					Sy.startThread();					
-					b_Button_Start=true;					
-					Stopuhrstatus.setText("Stopuhr aktiv");						
+			public void onClick(View v){	
+				if(GPS_Startpunkt.zwanzigsec)
+				{
+					if(b_Button_Start==false){
+						Sy= new SystemTimerAndroid(AnzeigeStopuhr);
+						Sy.startThread();					
+						b_Button_Start=true;					
+						Stopuhrstatus.setText("Stopuhr aktiv");						
+					}
+					else
+					{	
+						Sy.startThread();
+					}
 				}
 				else
-				{	
-					Sy.startThread();
+				{
+					Toast.makeText(Main_Activity, "Es wurde noch kein Startpunkt aufgenommen", Toast.LENGTH_LONG).show();
 				}
-				
 			}
 		});
 		
@@ -238,15 +246,18 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 		Button_Standort_festlegen.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				if(StandortButton_AnzeigeUmschalt==false)
+				if(StandortButton_Anzeige_Zielerreicht==true)
 				{
 					Button_Standort_festlegen.setText("Standort festlegen");
 					safe_data=false;
+					StandortButton_Anzeige_Zielerreicht=false;
 				}
-				Standort_jetzt_festlegen=true;
-				StandortButton_AnzeigeUmschalt=true;
-				GPS_Punkt=false;
-				GPS_Startpunkt.Set_punkt(Breite_temp, Länge_temp);
+				else{
+					Standort_jetzt_festlegen=true;	
+					GPS_Punkt=false;
+					GPS_Startpunkt.Set_punkt(Breite_temp, Länge_temp);
+				}
+				
 			}
 		});
 		
@@ -262,28 +273,9 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 		return rootView;
 	}
 	
-	//private boolean Abstand_größer_5m(double Lat_akt, double Lon_akt)
-	//{
-	//	double distBreite=Math.abs(Lat_akt-Breite)*111320;
-	//	double distLänge1=Math.abs(Lon_akt-Länge)*111320;
-	//	double Breiterad=Lon_akt*Math.PI/180;		
-	//	double distLänge2=distLänge1*Math.cos(Breiterad);
-	//	double abstand=Math.sqrt(distBreite*distBreite+distLänge2*distLänge2);
-	//	if(abstand>=5)
-	//		return true;
-	//	else
-	//		return false;
-	//}
-
+	
 	private boolean Koordinaten_Differenz_größer2m(double Lat_alt, double Lat_neu, double Long_alt, double Long_neu)
 	{
-//		double dif_Lat=Math.abs(Lat_alt-Lat_neu);
-//		double dif_Long=Math.abs(Long_alt-Long_neu);
-//		if(dif_Lat>=0.0001 || dif_Long>=0.0001)
-//			return true;
-//		else
-//			return false;
-		
 		double distBreite=Math.abs(Lat_alt-Lat_neu)*111320;
 		double distLänge1=Math.abs(Long_alt-Long_neu)*111320;
 		double Breiterad=Long_neu*Math.PI/180;		
@@ -359,7 +351,22 @@ public class GPS_basierte_Stopuhr extends DialogFragment {
 	
 	private void Timemanagement(double Lat, double Long)
 	{		
-		long ID_temp = data.EntryExists(Lat, Long);
+		long ID_temp=-1;
+		try
+		{
+			data.open();
+			ID_temp = data.EntryExists(Lat, Long);	//hier ist der Fehler
+		} 
+		catch (Exception ex) 
+		{
+			Toast.makeText(Main_Activity, ex.toString(), Toast.LENGTH_LONG).show();
+			Log.d(TAG, ex.toString());
+		} 
+		finally
+		{
+			data.close();
+		}		
+		
 		if(ID_temp!=-1)//Eintrag gefunden
 		{
 			Treffer_IDs.add(ID_temp);		

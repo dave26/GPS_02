@@ -1,7 +1,6 @@
 
 package com.example.gps02;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -9,14 +8,9 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 
@@ -27,7 +21,6 @@ import android.widget.Toast;
 public class Startpunkt /*extends Activity*/{
 	
 	private Activity Activity;
-	private DialogFragment fragment;
 	public boolean IsRunning;
 	private long startTime;   
     public boolean zwanzigsec;
